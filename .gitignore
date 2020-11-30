@@ -1,0 +1,7 @@
+pollz/
+__pycache__
+polls.db
+client/node_modules
+client/package-lock.json
+client/.eslintcache
+client/README.md
