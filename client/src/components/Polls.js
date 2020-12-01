@@ -9,7 +9,7 @@ import {
 	TableHead,
 	TableRow
 } from '@material-ui/core';
-
+import { Visualize } from './Visualization';
 
 const useStyles = makeStyles({
 	table: {
@@ -27,11 +27,12 @@ export const Polls = ({ polls, setPolls }) => {
 		fetch('/data').then(response => response.json().then( data => (
 			setPolls(data.polls)
 		)).then( _ => setLoading(false))
-		)}, []);
+	)}, []);
 	
-		return (
+	return (
 		<div>
-			{loading ? <div>LODING.....</div> : 
+			<Visualize />
+			{loading ? <div>LOADING.....</div> : 
 			<div>
 				<TableContainer component={Paper}>
 					<Table className={classes.table} aria-label="Poll Entries">
@@ -49,7 +50,7 @@ export const Polls = ({ polls, setPolls }) => {
 									<TableCell component="th" scope="row">{poll.uid}</TableCell>
 									<TableCell align="right">{poll.name}</TableCell>
 									<TableCell align="right">{poll.vote.toString()}</TableCell>
-									<TableCell align="right">{poll.date}</TableCell>
+									<TableCell align="right">{poll.date.toString()}</TableCell>
 								</TableRow>
 							)})}		
 						</TableBody>
