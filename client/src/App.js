@@ -8,12 +8,15 @@ import { DialogForm } from './components/DialogForm';
 import { Polls } from './components/Polls';
 
 function App() {
-	const [ polls, setPolls ] = useState(null);
-	const [open, setOpen] = useState(false);
-	const [value, setValue] = useState('No');
-	const [text, setText] = useState('John Doe');
-	const [selectedDate, setSelectedDate] = useState(new Date());
+	
+	// setting up react hooks for use across the application.
+	const [ polls, setPolls ] = useState(null); // handles storing of the polls data
+	const [open, setOpen] = useState(false); // handles opening and clossing of the poll pop up
+	const [value, setValue] = useState('No'); // handles storing the vote response
+	const [text, setText] = useState('John Doe'); // handles storing the user response
+	const [selectedDate, setSelectedDate] = useState(new Date()); // handles storing date
 
+	// setting dark theme globally
 	const theme = createMuiTheme({
 		palette: createPalette({
 			type: 'dark',

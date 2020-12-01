@@ -20,9 +20,11 @@ const useStyles = makeStyles({
 export const Polls = ({ polls, setPolls }) => {
 	const classes = useStyles();
 	
-	
+	// handles checking if the page is loading. if the page is loading, don't try to display. handles async fetch of data from server. 
+	// should technically show a loading spinner but for now renders LOADING..... 
 	const [loading, setLoading] = useState(true);
 
+	// async get response from server to render the table
 	useEffect (() => {
 		fetch('/data').then(response => response.json().then( data => (
 			setPolls(data.polls)

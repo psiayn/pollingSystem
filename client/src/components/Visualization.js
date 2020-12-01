@@ -5,9 +5,11 @@ import {
 } from 'recharts';
 
 export const Visualize = () => {
+    // handling loading and saving response
     const [loading, setLoading] = useState(true);
     const [chartData, setChartData] = useState({ lineData: null, barData: null});
 
+    // get graph data from backend to display on charts
 	useEffect (() => {
 		fetch('/graphs').then(response => response.json().then( data => (
 			setChartData({ lineData: data.line, barData: data.bar })
@@ -49,5 +51,5 @@ export const Visualize = () => {
                 </div>
             }
         </div>
-            );
-        }
+    );
+}

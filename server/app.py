@@ -10,8 +10,11 @@ import sqlite3
 
 @app.route("/vote", methods=["POST"])
 def vote():
+    """
+    Handles the POST request /vote which takes the data and commits to the db via Entry ORM class returns SUCCESS.
+    """
+
     poll = request.get_json()
-    poll["date"], _ = poll["date"].split('T')
     poll["date"] = datetime.strptime(poll["date"], "%Y-%m-%d").date()
     new_poll = Entry(
         uid=randint(100000, 1000000), name=poll["name"], vote=poll["vote"], date=poll["date"]
@@ -21,11 +24,25 @@ def vote():
     db.session.commit()
 
     print(new_poll.uid, new_poll.name, new_poll.vote, new_poll.date)
-    return "YES", 201
+    return "SUCCESS"
 
 
 @app.route("/data")
 def data():
+    """
+    Handles the GET request /data which returns a JSON response containing poll data from the database which is then used to create the table of responses.
+    The output response is of the format:
+    {
+        polls: {
+            [
+                uid: User ID,
+                name: User Name,
+                vote: The vote picked,
+                date: The date picked
+            ]
+        }
+    }
+    """
 
     data_all = Entry.query.all()
     
@@ -40,15 +57,35 @@ def data():
 
 @app.route("/graphs")
 def graphs():
+    """
+    Handles the GET request /graphs which returns data pertaining to the line graph and the bar graph.
+    The JSON response format is 
+    {
+        line: {
+            [
+                date: the date picked,
+                yes: number of yes responses. (if there are none, this field would be omitted),
+                no: number of no responses. (if there are none, this field would be omitted. both yes and no won't be omitted in the same entry)
+            ]
+        },
+        bar : {
+            [
+                vote: the vote picked, either yes or no,
+                count: the corresponding count
+            ]
+        }
+    }
+    """
+
     conn = sqlite3.connect('polls.db')
     cur = conn.cursor()
     
     lineQuery = """select date, sum(cnt_success), sum(cnt_failure) from (
-        select date, vote, 
-            case when vote =1 then count(uid) else 0 end as cnt_success, 
-            case when vote = 0 then count(uid) else 0 end as cnt_failure
-        from entry
-        group by vote, date) as A 
+    select date, vote, 
+        case when vote =1 then count(uid) else 0 end as cnt_success, 
+        case when vote = 0 then count(uid) else 0 end as cnt_failure
+    from entry
+    group by vote, date) as A 
     group by date"""
     cur.execute(lineQuery)
     lineData = []

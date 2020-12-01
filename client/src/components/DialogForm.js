@@ -20,6 +20,7 @@ export const DialogForm = ({ open, setOpen, value, setValue, text, setText, sele
 		setSelectedDate(date);
 	};
 
+	// async function that posts form data to the backend.
 	async function postData(url = '', data = {}) {
 		const response = await fetch(url, {
 			method: 'POST',
@@ -31,23 +32,19 @@ export const DialogForm = ({ open, setOpen, value, setValue, text, setText, sele
 		return response.json();
 	}
 
+	// async function that submits the form and calls postData
 	const formSubmit = async () => {
 		let vote = false;
 		if (value === "Yes") {
 			vote = true;
 		}
 		
-		console.log(open);
-		console.log(value);
-		console.log(text);
-		console.log(selectedDate);
 		let data = {
 			name: text,
 			vote: vote,
 			date: selectedDate
 		};
 		let resp = await postData('/vote', data);
-		console.log(resp);
 		setOpen(false);
 	};
 
